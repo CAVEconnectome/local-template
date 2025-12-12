@@ -1,0 +1,23 @@
+# ------------------
+#   Environment Setup
+# ------------------
+
+local_environment_name:
+  type: str
+  help: Environment name (must match the parent environment folder name, e.g., ltv, api).
+  validator: "{% if not local_environment_name %}local_environment_name is required{% endif %}"
+
+local_cluster_prefix:
+  type: str
+  help: Short identifier used as cluster_prefix and DNS subdomain (e.g. ltv7, ltv8, apiv1). Should be clearly related to the local_environment_name.
+  validator: "{% if not local_cluster_prefix %}local_cluster_prefix is required{% elif not local_cluster_prefix | regex_search('^[a-z0-9-]+$') %}local_cluster_prefix must contain only lowercase letters, numbers, and hyphens{% endif %}"
+
+# --------------------
+#   Application Config
+# --------------------
+
+materialize_datastack:
+  type: str
+  help: The first datastack that you want to set up, and create a templated materialization schedule for. You must supply an answer, but is easy to change later.
+  default: my_new_datastack
+
