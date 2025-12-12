@@ -12,9 +12,56 @@ local_cluster_prefix:
   help: Short identifier used as cluster_prefix and DNS subdomain (e.g. ltv7, ltv8, apiv1). Should be clearly related to the local_environment_name.
   validator: "{% if not local_cluster_prefix %}local_cluster_prefix is required{% elif not local_cluster_prefix | regex_search('^[a-z0-9-]+$') %}local_cluster_prefix must contain only lowercase letters, numbers, and hyphens{% endif %}"
 
+# -------------------
+#   Project Foundation (from environment)
+# -------------------
+
+project_id:
+  type: str
+  help: Name of the google project id (inherited from environment)
+  validator: "{% if not project_id %}project_id is required{% endif %}"
+
+region:
+  type: str
+  help: GCP region for regional resources (inherited from environment)
+  validator: "{% if not region %}region is required{% elif not region | regex_search('^[a-z]+-[a-z]+[0-9]+$') %}region must be in GCP format (e.g., us-west1){% endif %}"
+
+zone:
+  type: str
+  help: GCP zone used in kube context (inherited from environment)
+  validator: "{% if not zone %}zone is required{% elif not zone | regex_search('^[a-z]+-[a-z]+[0-9]+-[a-z]$') %}zone must be in GCP format (e.g., us-west1-b){% endif %}"
+
+# ---------------------
+#   Core Infrastructure (from environment)
+# ---------------------
+
+domain_name:
+  type: str
+  help: Base domain without protocols (inherited from environment)
+  validator: "{% if not domain_name %}domain_name is required{% elif domain_name.startswith('http') %}Invalid format — omit protocol (http/https){% endif %}"
+
+dns_zone:
+  type: str
+  help: Cloud DNS managed zone name (inherited from environment)
+  default: cave
+
+# ----------
+#   Security (from environment)
+# ----------
+
+letsencrypt_email:
+  type: str
+  help: Email for Let's Encrypt certificates (inherited from environment)
+  validator: "{% if not letsencrypt_email %}letsencrypt_email is required{% elif '@' not in letsencrypt_email %}letsencrypt_email must be a valid email address{% endif %}"
+
 # --------------------
 #   Application Config
 # --------------------
+
+health_annotation_align_volume:
+  type: str
+  help: An aligned volume name for Annotation service liveliness probe (inherited from environment)
+  validator: "{% if not health_annotation_align_volume %}health_annotation_align_volume is required{% endif %}"
 
 materialize_datastack:
   type: str
