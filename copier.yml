@@ -1,3 +1,12 @@
+_subdirectory: "{{ subtemplate }}"
+
+subtemplate:
+  type: str
+  help: Subtemplate name used for the cluster folder (e.g., environment-template, cluster-template). Default will work.
+  default: environment-template
+  choices:
+    - environment-template
+    - cluster-template
 # ------------------
 #   Environment Setup
 # ------------------
